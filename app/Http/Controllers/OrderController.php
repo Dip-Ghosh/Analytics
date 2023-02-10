@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Service\OrderService;
-use App\Models\Order;
+use Exception;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    protected $orderService;
+    protected OrderService $orderService;
 
     public function __construct(OrderService $orderService)
     {
@@ -19,12 +19,11 @@ class OrderController extends Controller
     {
         try {
             return response()->json([
-                "data" => $this->orderService->search($request->all()),
-            ],200);
+                "data"   => $this->orderService->search($request->all()),
+                "status" => "success",
+            ], 200);
         } catch (Exception $e) {
-            throw new \RuntimeException($e->getMessage());
+           throw new Exception($e->getMessage());
         }
-
     }
-
 }

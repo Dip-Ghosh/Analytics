@@ -3,44 +3,36 @@
 namespace App\Http\Service;
 
 use App\Http\Repository\OrderRepository;
-use DateTime;
 
 class OrderService
 {
-    protected OrderRepository $orderRespository;
+    const DAY_WISE_REPORT  = 7;
+    const DATE_WISE_REPORT = 30;
+
+    protected OrderRepository $orderRepository;
 
     public function __construct(OrderRepository $orderRepository)
     {
-        $this->orderRespository = $orderRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function search(array $params)
     {
         $conditions['startDate'] = $params['start_date'];
         $conditions['endDate']   = $params['end_date'];
-        $conditions['days']      = $this->getDays($conditions);
+        $conditions['days']      = getDays($conditions);
 
         return $this->getSearchResult($conditions);
-
-    }
-
-    private function getDays(array $conditions): int
-    {
-        $startDate = new DateTime($conditions['startDate']);
-        $endDate   = new DateTime($conditions['endDate']);
-
-        return (int)$endDate->diff($startDate)->format('%a');
     }
 
     private function getSearchResult(array $conditions)
     {
         $numberOfDays = $conditions['days'];
 
-        if ($numberOfDays <= 7) return $this->orderRespository->getOrderByDay($conditions);
+        if ($numberOfDays < self::DAY_WISE_REPORT) return $this->orderRepository->getOrdersByDay($conditions);
 
-        elseif ($numberOfDays > 7  && $numberOfDays <= 30)  return $this->orderRespository->getOrderByDate($conditions);
+        else if ($numberOfDays < self::DATE_WISE_REPORT) return $this->orderRepository->getOrdersByDate($conditions);
 
-        else return $this->orderRespository->getOrderByDate($conditions);
-
+        else return $this->orderRepository->getOrdersByMonth($conditions);
     }
 }

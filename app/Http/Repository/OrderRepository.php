@@ -3,12 +3,11 @@
 namespace App\Http\Repository;
 
 use App\Models\Order;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository
 {
-    protected $model;
+    protected Order $model;
 
     public function __construct(Order $model)
     {
@@ -20,19 +19,19 @@ class OrderRepository
         return $this->model->whereBetween('booking_date', [$conditions['startDate'], $conditions['endDate']]);
     }
 
-    public function getOrderByDay(array $conditions)
+    public function getOrdersByDay(array $conditions)
     {
         $query = $this->prepareQuery($conditions)
-            ->select(DB::raw('
-                  DATE_FORMAT(booking_date, \'%W\') AS date,
+            ->select(DB::raw("
+                  DATE_FORMAT(booking_date, '%W') AS date,
                   group_concat(pnr) as pnr,
-                  count(id) AS totalOrder'
+                  count(id) AS totalOrder"
             ));
 
-        return $this->getGroupByDate($query);
+        return $this->makeGroupOrderByQuery($query);
     }
 
-    public function getOrderByDate(array $conditions)
+    public function getOrdersByDate(array $conditions)
     {
         $query = $this->prepareQuery($conditions)
             ->select(DB::raw('
@@ -40,15 +39,21 @@ class OrderRepository
                 group_concat(pnr) as pnr,
                 count(id) AS totalOrder'));
 
-        return $this->getGroupByDate($query);
+        return $this->makeGroupOrderByQuery($query);
     }
 
-    public function getOrderByMonth(array $conditions)
+    public function getOrdersByMonth(array $conditions)
     {
-        $query = $this->prepareQuery($conditions);
+        $query = $this->prepareQuery($conditions)
+            ->select(DB::raw("
+                DATE_FORMAT(booking_date, '%M-%Y') AS date,
+                group_concat(pnr) as pnr,
+                count(id) AS totalOrder"));
+
+        return $this->makeGroupOrderByQuery($query);
     }
 
-    private function getGroupByDate($query)
+    private function makeGroupOrderByQuery($query)
     {
         return $query->groupBy('date')
             ->orderBy('totalOrder', 'DESC')
