@@ -1,5 +1,5 @@
 #Project Set up
-- First clone the project git@github.com:Dip-Ghosh/Analytics.git
+- First clone the project from the given link https://github.com/Dip-Ghosh/Analytics
 - Run composer install
 - Run cp .env.example .env
 - Generate Key by running php artisan key:generate
