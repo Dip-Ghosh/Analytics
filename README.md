@@ -5,7 +5,8 @@
 - Generate Key by running php artisan key:generate
 - Add the Database configuration
 - Run php artisan migrate
-- Run php artisan db:seed
+- Run php artisan db:seed. This will create random data.
+- PHP Version 8.1 
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
