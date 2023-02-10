@@ -1,3 +1,12 @@
+#Project Set up
+- First clone the project git@github.com:Dip-Ghosh/Analytics.git
+- Run composer install
+- Run cp .env.example .env
+- Generate Key by running php artisan key:generate
+- Add the Database configuration
+- Run php artisan migrate
+- Run php artisan db:seed
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
