@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderValidationRequest;
 use App\Http\Service\OrderService;
 use Exception;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -15,7 +15,7 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function search(Request $request): \Illuminate\Http\JsonResponse
+    public function search(OrderValidationRequest $request): \Illuminate\Http\JsonResponse
     {
         try {
             return response()->json([
